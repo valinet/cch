@@ -10,8 +10,6 @@ CCH emits #line directives so all line-number-dependent constructs (e.g. compile
 
 ## Building ##
 
-(I'm not really fluent with cmake and different build systems, so pullrequests with more detailed instructions are welcome)
-
 ```
 git clone https://github.com/siladrenja/cch-sila
 cd cch-sila
