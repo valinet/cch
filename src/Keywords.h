@@ -8,7 +8,8 @@ static struct {
     // entirely in the header.
     bool isHeaderOnly(const StringView& keyword) {
         return keyword == "inline"
-            || keyword == "__force_inline";
+            || keyword == "__force_inline"
+            || keyword == "constexpr";
     }
 
     // Returns true if the keyword cannot exist in the
