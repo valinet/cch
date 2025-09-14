@@ -1,4 +1,5 @@
 #include <assert.h> // for assert()
+#include <filesystem>
 #include <getopt.h> // for getopt()
 #include <stdlib.h> // for abort()
 #include <fstream>
@@ -8,22 +9,31 @@
 
 using namespace Util;
 
-static void writeToFile(const string& filename,
-                        const string& banner,
-                        const stringstream& content,
+static void writeToFile(const std::string& filename,
+                        const std::string& banner,
+                        const std::stringstream& content,
                         bool diffAware) {
-    string newContents = (!banner.empty() ? (banner + "\n") : "") + content.str();
-    string existingContents;
+    std::string newContents = (!banner.empty() ? (banner + "\n") : "") + content.str();
+    std::string existingContents;
+
+    // Ensure parent directory exists
+    filesystem::path filePath(filename);
+    filesystem::path parentDir = filePath.parent_path();
+    if (!parentDir.empty() && !filesystem::exists(parentDir)) {
+        filesystem::create_directories(parentDir);  // Recursively creates all missing directories
+    }
+
     if (!diffAware
         || !readFromFile(filename, &existingContents)
         || diff(newContents, existingContents)) {
-        ofstream file(filename.c_str(), ios::binary);
+        std::ofstream file(filename, std::ios::binary);
         file << newContents;
         file.close();
-    } else {
-        cerr << "Contents of " << filename << " unchanged, skipping writing" << endl;
-    }
+        } else {
+            std::cerr << "Contents of " << filename << " unchanged, skipping writing" << std::endl;
+        }
 }
+
 
 void version() {
     cerr << "CCH - " << Version::kRepoURL << endl <<
