@@ -158,15 +158,29 @@ private:
                 mTokens.clear();
             }
         } else if (mTokens.back().type == BRACE_GROUP
-                   && (mTokens.containsType(CLASS) || mTokens.containsType(NAMESPACE))) {
-            // In the case of a NAMESPACE or CLASS, the BRACE_GROUP here
-            // is the body of that namespace or class, so we must recurse
-            // into it.
+                   && ([&]() {
+                        // helper lambda to detect class/namespace regardless of token type
+                        for (int i = 0; i < mTokens.size()-1; ++i) {
+                            if (mTokens[i].type == CLASS || mTokens[i].type == NAMESPACE) return true;
+                            if (mTokens[i].type == TOKEN) {
+                                if (mTokens[i].value == "class"
+                                    || mTokens[i].value == "struct"
+                                    || mTokens[i].value == "union"
+                                    || mTokens[i].value == "namespace") {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
+                    })()) {
+            // It's a class/struct/union/namespace body.
             bool templated = false;
             string scopeName;
             for (int i = 0; i+1 < mTokens.size(); i++) {
-                // If we encounter the CLASS or NAMESPACE token,
-                if (mTokens[i].type == CLASS || mTokens[i].type == NAMESPACE) {
+                // If we encounter the CLASS or NAMESPACE token (or the raw token text),
+                if (mTokens[i].type == CLASS || mTokens[i].type == NAMESPACE
+                    || (mTokens[i].type == TOKEN &&
+                        (mTokens[i].value == "class" || mTokens[i].value == "struct" || mTokens[i].value == "union" || mTokens[i].value == "namespace"))) {
                     // skip past any whitespace/comments to the next token,
                     for (i++; i < mTokens.size() && (mTokens[i].type == WHITESPACE || mTokens[i].type == COMMENT); i++);
                     // and capture the token as the scope name.
@@ -174,9 +188,9 @@ private:
                         scopeName = mTokens[i].value.toString();
                     }
                     break;
-                } else if (mTokens[i].type == TEMPLATE) {
-                    // If we encounter a TEMPLATE token on the way, mark
-                    // this whole scope as being templated.
+                } else if (mTokens[i].type == TEMPLATE
+                           || (mTokens[i].type == TOKEN && mTokens[i].value == "template")) {
+                    // If we encounter a TEMPLATE token (or plain 'template' text), mark templated.
                     templated = true;
                 }
             }
