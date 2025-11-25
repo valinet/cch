@@ -3,9 +3,9 @@
 
 namespace Version {
     // The full SHA of the commit this binary was built from.
-    extern const char* kBuildVersion;
+    const char* kBuildVersion = "";
     // The URL for the canonical repository for this project.
-    extern const char* kRepoURL;
+    const char* kRepoURL = "";
 }
 
 #endif //__VERSION_H__
