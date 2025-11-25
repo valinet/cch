@@ -36,6 +36,7 @@ string Token::toString() const {
     case TEMPLATE: return "TEMPLATE";
     case USING: return "USING";
     case NAMESPACE: return "NAMESPACE";
+    case CONSTEXPR: return "CONSTEXPR";
     };
     assert(false && "Invalid TokenEnum value");
     // Keep older versions of g++ happy that fail to deduce

@@ -32,7 +32,9 @@ public:
                 type = USING;
             } else if (token.value == "namespace") {
                 type = NAMESPACE;
-            }
+            } else if (token.value == "constexpr") {
+                type = CONSTEXPR;
+            } 
         }
         if (type == token.type) {
             // Type was unchanged, no copy/modification needed.
@@ -135,6 +137,8 @@ private:
                     }
                 }
             }
+            // valinet: If line defines a constexpr, only put it into header file
+            if (mTokens.containsType(CONSTEXPR)) splitAssignmentToCCFile = false;
             if (!splitAssignmentToCCFile) {
                 // Dump everything to the header.
                 mTokens.flushToStream(mCtx->h());
