@@ -6,6 +6,7 @@
 #include "Keywords.h"
 #include "ParseContext.h"
 #include "Version.h"
+#include <regex>
 
 // Simple parser wrapper that transforms certain keywords
 // into their corresponding token types and passes
@@ -301,7 +302,10 @@ private:
                         // a commented out version to annotate.
                         mCtx->cc() << "/* " << mTokens[i].value << " */";
                     } else {
-                        mCtx->cc() << mTokens[i].value;
+                        //std::cerr << mTokens[i].value << std::endl;
+                        // valinet: take out default arguments from function definitions in implementations
+                        mCtx->cc() << std::regex_replace(mTokens[i].value.toString(), std::regex("= *(?:[^(),]|\\([^()]*\\))+"), ""); // "= *[^,)]+"
+                        //mCtx->cc() << mTokens[i].value;
                     }
                 }
                 mCtx->h() << ";";
