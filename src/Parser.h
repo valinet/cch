@@ -111,7 +111,11 @@ private:
                 }
             }
 
-            mTokens.flushToStream(mCtx->h());
+            if (mTokens.back().value.toString().contains("//IMPLEMENTATION//")) {
+                mTokens.flushToStream(mCtx->cc());
+            } else {
+                mTokens.flushToStream(mCtx->h());
+            }
         } else if (mTokens.back().type == COLON) {
             if (isLabel(mTokens)) {
                 // Flush the label out to the header.
