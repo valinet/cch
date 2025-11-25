@@ -48,7 +48,7 @@ public:
           outputExt(outputExt),
           fileExt(fileExt){
 
-        cc() << "#include \"" << outputFormat << "." << outputExt << "\"" << endl;
+        cc() << "#define __IMPLEMENTATION__" << endl << "#include \"" << filename(cchFile) << ".h\"" << endl;
         h() << "#pragma once" << endl << endl;
     }
 
