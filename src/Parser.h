@@ -96,12 +96,18 @@ private:
             // and any leading whitespace/comments out to the header.
 
             if (mTokens.back().value.StartsWith("#include")){
+                bool ab = true;
                 size_t end = mTokens.back().value.find('>');
+                if (end == -1) {
+                    ab = false;
+                    end = mTokens.back().value.reverseFind('"', mTokens.back().value.size());
+                }
 
                 size_t start = mTokens.back().value.reverseFind('.', end);
 
                 if (mTokens.back().value.subStrEquals(start + 1, end, mCtx->fileExt.c_str())) {
-                    mTokens.back().value.replace(start + 1, end, mCtx->outputExt.c_str(), mCtx->outputExt.size());
+                    mTokens.back().value.substitute(mTokens.back().value.toString().substr(0, end) + ".h" + (ab ? ">" : "\"") + "\n");
+                    //mTokens.back().value.replace(start + 1, end, mCtx->outputExt.c_str(), mCtx->outputExt.size());
                 }
             }
 

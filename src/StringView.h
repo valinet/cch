@@ -142,8 +142,14 @@ public:
         mSize = mOwned.size();
     }
 
+    void substitute(const std::string& buf) {
+        mOwned = buf;
+        mData = mOwned.data();
+        mSize = mOwned.size();
+    }
+
     bool StartsWith(const string& str) {
-        return strcmp(mData, str.c_str()) == 0;
+        return string(mData).starts_with(str);
     }
 
     string toString() const {
