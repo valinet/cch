@@ -1,4 +1,3 @@
-this project is a fork of [cch](https://github.com/tjps/cch) by tjps, forked with the intention of maintaining it.
 
 # CCH #
 
@@ -8,38 +7,26 @@ CCH is designed to be hooked into your build system as a step prior to compilati
 
 CCH emits #line directives so all line-number-dependent constructs (e.g. compiler errors, logging systems) are true to the original .cch file.
 
-# command line arguments
-  ```
-     Required:
-      -i <file>, --input=<file> Input CCH file
-   Optional:
-      -o <fmt>, --output=<fmt>  Output location format string (Default: "%p")
-      -d, --debug               Enable debug output
-      -h, --help                Show this help menu and exit
-      -v, --version             Show program version and exit
-      --noLineNumbers           Don't emit #line directives
-      --noBanner                Don't add CCH banner to generated files
-      --ccExtension=<ext>       Set output extension (Default: cc)
-      --hExtension=<ext>        Set output extension (Default: h
-   Experimental:    (**subject to change/removal**)
-      --diff                    Enable content-aware diff for not rewriting
-                                an output if no source change occurred for it
-  ```
+Try CCH and see what it can do for your C++ codebase today!
 
-## Building ##
+Consider trying [makefile.py](https://github.com/tjps/makefile.py) as well - autogenerate a Makefile for your project.
 
-```
-git clone https://github.com/siladrenja/cch-sila
-cd cch-sila
-cmake .
-cmake --build ./build
-```
+[![Build Status](https://travis-ci.org/tjps/cch.svg?branch=master)](https://travis-ci.org/tjps/cch)
 
-And then build the given source files wth your desired build system
+## Installation ##
 
-You can copy the given executeable into PATH or into your project's root folder (recommended to put it to .gitignore if the project is a git repo)
+For both Linux and OS X:
+
+    make && make test && sudo make install
+
+For Windows compilation under Cygwin:
+
+    make && make test
+
+then copy the binary to some directory in PATH.
 
 For configuring your editor, see [editor bindings](#editor-bindings) below.
+
 
 ## Example ##
 ##### .cch file:
@@ -118,9 +105,4 @@ au BufEnter *.cch setf cpp
 <b>ctags</b> - add .cch to the extension->language mapping when invoking ctags:
 ```
 $ ctags ... --langmap="c++:+.cch" ...
-```
-
-<b>VSCode</b>
-```
-https://stackoverflow.com/questions/29973619/how-to-associate-a-file-extension-with-a-certain-language-in-vs-code
 ```
