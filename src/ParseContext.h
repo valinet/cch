@@ -39,7 +39,8 @@ public:
             const std::string& outputFormat,
             const std::string& inputExt,
             const std::string& outputExt,
-            const std::string& fileExt)
+            const std::string& fileExt,
+            const std::string& pchFile)
         : cchFile(cchFilename),
           emitLineNumbers(_emitLineNumbers),
           ccfile(ccOutputStream),
@@ -48,7 +49,7 @@ public:
           outputExt(outputExt),
           fileExt(fileExt){
 
-        cc() << "#define __IMPLEMENTATION__" << endl << "#include \"" << filename(cchFile) << ".h\"" << endl;
+        cc() << (!pchFile.empty() ? "#include \"" : "") << (!pchFile.empty() ? pchFile : "") << (!pchFile.empty() ? "\"\n" : "") << "#include \"" << filename(cchFile) << ".h\"" << endl;
     }
 
     ~ParseContext() {

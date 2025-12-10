@@ -52,6 +52,7 @@ namespace Defaults {
     static const char* ccExtension = "cc";
     static const char* hExtension = "h";
     static const char* outputFormat = "%p";
+    static const char* pchFile = "";
 };
 
 int main(int argc, char** argv) {
@@ -59,6 +60,7 @@ int main(int argc, char** argv) {
     string outputFormat = Defaults::outputFormat;
     string ccExtension = Defaults::ccExtension;
     string hExtension = Defaults::hExtension;
+    string pchFile = Defaults::pchFile;
     bool debug = false;
     bool includeBanner = true;
     bool emitLineNumbers = true;
@@ -75,6 +77,7 @@ int main(int argc, char** argv) {
         {"noLineNumbers", no_argument, 0, 2},
         {"ccExtension", required_argument, 0, 3},
         {"hExtension", required_argument, 0, 4},
+        {"pch", required_argument, 0, 'k'},
         {"diff", no_argument, 0, 5},
         {0, 0, 0, 0}
     };
@@ -91,6 +94,7 @@ int main(int argc, char** argv) {
         case 'd': debug = true; break;
         case 'i': cchFilename = optarg; break;
         case 'o': outputFormat = optarg; break;
+        case 'k': pchFile = optarg; break;
         case 'v': version(); return 1;
         case 'h':
         case '?':
@@ -140,7 +144,7 @@ int main(int argc, char** argv) {
     stringstream cc, h;
     {   // Split cch into the cc and h buffers.
         ParseContext ctx(cchFilename, &cc, &h, emitLineNumbers, outputFormat,
-                         ccExtension, hExtension, extractFileExtension(cchFilename));
+                         ccExtension, hExtension, extractFileExtension(cchFilename), pchFile);
         BaseTokenizer tokenizer;
         BaseParser parser(&ctx, &tokenizer);
 
