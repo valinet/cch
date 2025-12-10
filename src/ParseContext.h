@@ -49,7 +49,6 @@ public:
           fileExt(fileExt){
 
         cc() << "#define __IMPLEMENTATION__" << endl << "#include \"" << filename(cchFile) << ".h\"" << endl;
-        h() << "#pragma once" << endl << endl;
     }
 
     ~ParseContext() {
